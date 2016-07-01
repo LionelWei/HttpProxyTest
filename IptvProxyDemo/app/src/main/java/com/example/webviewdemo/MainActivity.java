@@ -40,7 +40,7 @@ public class MainActivity extends Activity {
         textView = (TextView) findViewById(R.id.text1);
         onInit();
 
-        HttpFactory.requestByClient(this, HttpFactory.CLIENT_HTTP_URL_CONNECTION);
+        HttpFactory.requestByClient(this, HttpFactory.CLIENT_OK_HTTP);
 
         
 //        new Thread(new Runnable() {

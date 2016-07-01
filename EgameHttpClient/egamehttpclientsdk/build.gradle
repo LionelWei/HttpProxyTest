@@ -1,0 +1,52 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion "23.0.3"
+
+    defaultConfig {
+        minSdkVersion 9
+        targetSdkVersion 23
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        dev {
+            minifyEnabled false
+            debuggable true
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    testCompile 'junit:junit:4.12'
+    compile 'com.android.support:appcompat-v7:23.4.0'
+    compile 'com.squareup.okhttp3:okhttp:3.3.1'
+}
+
+task makeJar(dependsOn: ['assembleRelease'], type: Jar) {
+
+    manifest {
+        attributes = ['Implementation-Title'  : 'Egame Http Client',
+                      'Implementation-Version': "1.0"]
+    }
+
+    baseName 'egamehttpclient_' + new Date().format('yyyyMMdd') + '_' + 'release'
+
+    File[] f = file('build/intermediates/bundles/release/libs').listFiles()
+    int length=f==null?0:f.length
+    for (int i = 0; i < length; i++) {
+        from zipTree(f[i])
+    }
+
+    from fileTree(dir: 'build/intermediates/bundles/release', includes: ['assets/**'])
+
+    from fileTree(dir: 'build/intermediates/classes/release')
+
+
+}
