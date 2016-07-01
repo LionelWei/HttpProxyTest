@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+    <style>
+		body{background-image: url('images/background.jpg');background-size: cover;}
+		a{}
+    </style>
+</head>
+<body onload="startApp()">
+<a href="javascript:startApp()" id="test"></a>
+<script>
+document.getElementById('test').focus();
+function startApp(){
+ try{
+ 		 //以爱游戏包名为例
+ 		var packageName = "com.egame.tv1";  
+ 		//不支持webview跳转功能的时候跳转的链接  
+		var iptvUrl = "http://www.baidu.com";  
+		//打开应用携带的参数  
+		var param = "id=test&name=test"; 
+		//下载包的url地址        
+		var downloadUrl =  "http://open.play.cn/f/pkg/gm/000/001/766/ba4cf61eh1af4369/WSSGS.apk"; 
+		//var downloadUrl =  "http://www.apk3.com/uploads/soft/guiguangbao/cjml.apk";
+ 		//判断是否安装
+ 		if(STBAppManager.isAppInstalled(packageName)){
+ 			//启动APK
+ 			STBAppManager.startAppByName(packageName,param);
+ 		}else{
+ 			//下载对应应用
+ 		   STBAppManager.downloadApkFile(downloadUrl);
+ 		}
+    }catch(e){
+    	//跳转到相关链接
+    	window.location.href=iptvUrl;
+    }
+}
+
+</script>
+</body>
+</html>
