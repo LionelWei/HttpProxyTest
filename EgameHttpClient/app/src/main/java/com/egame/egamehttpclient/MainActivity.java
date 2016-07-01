@@ -11,7 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.egame.egamehttpclientsdk.EgameHttpManager;
+import com.egame.egamehttpclientsdk.EgameProxyManager;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -41,10 +41,9 @@ public class MainActivity extends AppCompatActivity {
 
     public void start() {
         OkHttpClient client = new OkHttpClient
-                .Builder()
-                .build();
-
-        client = EgameHttpManager.enableProxy(client);
+                                .Builder()
+                                .build();
+        client = EgameProxyManager.enableProxy(client);
 
         final Request request = new Request
                 .Builder()

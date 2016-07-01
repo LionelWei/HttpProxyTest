@@ -11,7 +11,9 @@ package com.egame.egamehttpclientsdk.util;
 import java.net.InetSocketAddress;
 
 public class ProxyUtil {
-    public static final String PROXY_IP = "192.168.251.57";
+//    public static final String PROXY_IP = "192.168.251.57";
+//    public static final int PROXY_PORT = 9999;
+    public static final String PROXY_IP = "218.94.99.204";
     public static final int PROXY_PORT = 9999;
     public static final InetSocketAddress SOCKET_ADDRESS
             = new InetSocketAddress(PROXY_IP,PROXY_PORT);

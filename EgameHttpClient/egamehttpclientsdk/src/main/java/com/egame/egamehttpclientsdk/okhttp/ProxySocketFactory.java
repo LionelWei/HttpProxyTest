@@ -21,7 +21,6 @@ import javax.net.SocketFactory;
 public class ProxySocketFactory extends SocketFactory {
     public Socket createSocket() {
         Proxy proxy = new Proxy(Proxy.Type.SOCKS, ProxyUtil.SOCKET_ADDRESS);
-        System.out.println("-------createSocket-----");
         return new Socket(proxy);
     }
 

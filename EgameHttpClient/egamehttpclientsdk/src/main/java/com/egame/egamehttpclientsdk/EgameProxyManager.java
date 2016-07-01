@@ -12,7 +12,7 @@ import com.egame.egamehttpclientsdk.okhttp.ProxySocketFactory;
 
 import okhttp3.OkHttpClient;
 
-public class EgameHttpManager {
+public class EgameProxyManager {
     public static OkHttpClient enableProxy(OkHttpClient oldClient) {
         return  oldClient
                 .newBuilder()

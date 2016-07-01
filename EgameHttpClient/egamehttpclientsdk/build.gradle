@@ -25,7 +25,6 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:23.4.0'
     compile 'com.squareup.okhttp3:okhttp:3.3.1'
 }
 
@@ -38,15 +37,9 @@ task makeJar(dependsOn: ['assembleRelease'], type: Jar) {
 
     baseName 'egamehttpclient_' + new Date().format('yyyyMMdd') + '_' + 'release'
 
-    File[] f = file('build/intermediates/bundles/release/libs').listFiles()
-    int length=f==null?0:f.length
-    for (int i = 0; i < length; i++) {
-        from zipTree(f[i])
-    }
-
-    from fileTree(dir: 'build/intermediates/bundles/release', includes: ['assets/**'])
-
-    from fileTree(dir: 'build/intermediates/classes/release')
-
-
+    from 'build/intermediates/classes/release'
+    destinationDir = file('build/libs/release')
+    exclude('**/BuildConfig.class', '**/R.class')
+    exclude { it.name.startsWith('R$'); }
+    exclude { it.name.startsWith('Test'); }
 }
