@@ -20,7 +20,7 @@ import javax.net.SocketFactory;
 
 public class ProxySocketFactory extends SocketFactory {
     public Socket createSocket() {
-        Proxy proxy = new Proxy(Proxy.Type.HTTP, ProxyUtil.SOCKET_ADDRESS);
+        Proxy proxy = new Proxy(Proxy.Type.SOCKS, ProxyUtil.SOCKET_ADDRESS);
         return new Socket(proxy);
     }
 

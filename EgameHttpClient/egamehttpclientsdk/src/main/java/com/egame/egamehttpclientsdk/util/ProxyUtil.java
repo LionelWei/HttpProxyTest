@@ -15,10 +15,10 @@ public class ProxyUtil {
     public static final String PROXY_IP_INNER = "192.168.251.57";
     public static final int PROXY_PORT_INNER = 9999;
 */
-    public static final String PROXY_IP_INNER = "192.168.0.102";
+    public static final String PROXY_IP_INNER = "192.168.31.242";
     public static final int PROXY_PORT_INNER = 8888;
     public static final String PROXY_IP_OUTER = "218.94.99.204";
     public static final int PROXY_PORT_OUTER = 9999;
     public static final InetSocketAddress SOCKET_ADDRESS
-            = InetSocketAddress.createUnresolved(PROXY_IP_INNER,PROXY_PORT_INNER);
+            = InetSocketAddress.createUnresolved(PROXY_IP_OUTER,PROXY_PORT_OUTER);
 }

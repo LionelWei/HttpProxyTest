@@ -25,9 +25,11 @@ public class IonTest extends AbsHttp{
     }
 
     public void start() {
+/*
         Ion.getDefault(mContext)
                 .configure()
                 .proxy(ProxyUtil.PROXY_IP_INNER, ProxyUtil.PROXY_PORT_INNER);
+*/
 
         Log.d("MY_PROXY", "ION start");
         File directory = Environment.getExternalStorageDirectory();;
@@ -40,7 +42,7 @@ public class IonTest extends AbsHttp{
 
         Ion.with(mContext)
                 .load(DOWNLOAD_URL)
-                .proxy(ProxyUtil.PROXY_IP_INNER, ProxyUtil.PROXY_PORT_INNER)
+                .proxy(ProxyUtil.PROXY_IP_OUTER, ProxyUtil.PROXY_PORT_OUTER)
                 .setLogging("MyLogs", Log.VERBOSE)
                 .write(mDownFile)
                 .withResponse()

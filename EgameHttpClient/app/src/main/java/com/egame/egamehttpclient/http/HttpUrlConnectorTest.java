@@ -36,7 +36,7 @@ public class HttpUrlConnectorTest extends AbsHttp {
                     URL url = new URL(DOWNLOAD_URL);
                     if (true) {
                         // url connection的代理不通 android只能接受resolved address
-                        Proxy proxy = new Proxy(Proxy.Type.HTTP, ProxyUtil.SOCKET_ADDRESS);
+                        Proxy proxy = new Proxy(Proxy.Type.SOCKS, ProxyUtil.SOCKET_ADDRESS);
                         connection = (HttpURLConnection) url.openConnection(proxy);
                     } else {
                         connection = (HttpURLConnection) url.openConnection();
@@ -44,6 +44,7 @@ public class HttpUrlConnectorTest extends AbsHttp {
                     connection.setRequestMethod("GET");
                     connection.setConnectTimeout(10000);
                     connection.setReadTimeout(10000);
+
                     connection.connect();
                     int code = connection.getResponseCode();
                     Log.d("MY_URLCONNECT", "code: " + code);
