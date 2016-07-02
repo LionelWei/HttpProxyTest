@@ -11,6 +11,10 @@ package com.egame.egamehttpclientsdk.util;
 import java.net.InetSocketAddress;
 
 public class ProxyUtil {
+
+    static {
+        System.loadLibrary("EgameProxy");
+    }
 /*
     public static final String PROXY_IP_INNER = "192.168.251.57";
     public static final int PROXY_PORT_INNER = 9999;
@@ -21,4 +25,8 @@ public class ProxyUtil {
     public static final int PROXY_PORT_OUTER = 9999;
     public static final InetSocketAddress SOCKET_ADDRESS
             = InetSocketAddress.createUnresolved(PROXY_IP_OUTER,PROXY_PORT_OUTER);
+
+    public static native String getIp();
+    public static native int getPort();
+
 }
