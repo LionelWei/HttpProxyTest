@@ -12,7 +12,7 @@ import android.content.Context;
 import android.os.Environment;
 import android.util.Log;
 
-import com.egame.egamehttpclientsdk.util.ProxyUtil;
+import com.egame.proxy.util.ProxyUtil;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 import com.koushikdutta.ion.Response;

@@ -1,4 +1,4 @@
-package com.egame.egamehttpclientsdk.okhttp;
+package com.egame.proxy.support;
 
 /*
  * FileName:	
@@ -8,7 +8,7 @@ package com.egame.egamehttpclientsdk.okhttp;
  * History:		2016/7/1 1.00 初始版本
  */
 
-import com.egame.egamehttpclientsdk.util.ProxyUtil;
+import com.egame.proxy.util.ProxyUtil;
 
 import java.io.IOException;
 import java.net.InetAddress;

@@ -2,7 +2,7 @@ package com.egame.egamehttpclient.http;
 
 
 
-import com.egame.egamehttpclientsdk.util.ProxyUtil;
+import com.egame.proxy.util.ProxyUtil;
 
 import org.apache.http.conn.ConnectTimeoutException;
 import org.apache.http.conn.scheme.SocketFactory;

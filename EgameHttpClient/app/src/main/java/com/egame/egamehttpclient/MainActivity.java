@@ -21,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void start() {
-//        HttpFactory.requestByClient(this, HttpFactory.CLIENT_OK_HTTP);
-        HttpFactory.requestByClient(this, HttpFactory.CLIENT_HTTP_URL_CONNECTION);
+        HttpFactory.requestByClient(this, HttpFactory.CLIENT_OK_HTTP);
+//        HttpFactory.requestByClient(this, HttpFactory.CLIENT_ION);
     }
 }

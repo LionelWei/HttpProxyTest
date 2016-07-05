@@ -12,7 +12,7 @@ import android.content.Context;
 import android.os.Environment;
 import android.util.Log;
 
-import com.egame.egamehttpclientsdk.EgameProxyManager;
+import com.egame.proxy.EgameProxy;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -32,11 +32,21 @@ public class OkHttpTest extends AbsHttp{
     }
 
     public void start() {
+        // 利用反射检查OkHttpClient类是否存在
+        try {
+            Class.forName("okhttp3.OkHttpClient");
+            doStart();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void doStart() {
         OkHttpClient client = new OkHttpClient
                 .Builder()
                 .build();
 
-        client = EgameProxyManager.enableProxy(client);
+        client = EgameProxy.enableOkHttpProxy(client);
 
         final Request request = new Request
                 .Builder()

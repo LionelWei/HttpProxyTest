@@ -1,4 +1,4 @@
-package com.egame.egamehttpclientsdk;
+package com.egame.proxy;
 
 import org.junit.Test;
 

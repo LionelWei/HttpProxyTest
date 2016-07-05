@@ -1,4 +1,4 @@
-package com.egame.egamehttpclientsdk.util;
+package com.egame.proxy.util;
 
 /*
  * FileName:	
@@ -11,22 +11,26 @@ package com.egame.egamehttpclientsdk.util;
 import java.net.InetSocketAddress;
 
 public class ProxyUtil {
-
+    public static final String TAG = "EgameProxy";
+/*
     static {
         System.loadLibrary("EgameProxy");
     }
-/*
+    public static native String getIp();
+    public static native int getPort();
+*/
+
+    // socks代理
     public static final String PROXY_IP_INNER = "192.168.251.57";
     public static final int PROXY_PORT_INNER = 9999;
-*/
+/*
+    // http代理
     public static final String PROXY_IP_INNER = "192.168.31.242";
     public static final int PROXY_PORT_INNER = 8888;
+*/
     public static final String PROXY_IP_OUTER = "218.94.99.204";
     public static final int PROXY_PORT_OUTER = 9999;
     public static final InetSocketAddress SOCKET_ADDRESS
-            = InetSocketAddress.createUnresolved(PROXY_IP_OUTER,PROXY_PORT_OUTER);
-
-    public static native String getIp();
-    public static native int getPort();
+            = InetSocketAddress.createUnresolved(PROXY_IP_INNER,PROXY_PORT_INNER);
 
 }

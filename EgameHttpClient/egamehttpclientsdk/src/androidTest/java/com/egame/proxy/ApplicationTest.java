@@ -1,4 +1,4 @@
-package com.egame.egamehttpclientsdk;
+package com.egame.proxy;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

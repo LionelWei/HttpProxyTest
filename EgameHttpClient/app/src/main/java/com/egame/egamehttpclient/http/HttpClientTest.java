@@ -12,7 +12,7 @@ import android.content.Context;
 import android.os.Environment;
 import android.util.Log;
 
-import com.egame.egamehttpclientsdk.util.ProxyUtil;
+import com.egame.proxy.util.ProxyUtil;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpVersion;
