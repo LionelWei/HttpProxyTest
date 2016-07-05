@@ -10,3 +10,8 @@ dependencies {
 ```
 
 - 初始化
+```
+EgameProxy.init(context);
+EgameProxy.enableProxy(context);
+RequestQueue queue = EgameProxy.enableVolleyProxy(context);
+```

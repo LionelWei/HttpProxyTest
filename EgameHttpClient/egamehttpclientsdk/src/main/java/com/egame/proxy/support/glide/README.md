@@ -26,7 +26,6 @@ dependencies {
 
 
 - 初始化
-在Application onCreate()添加:
 ```
 EgameProxy.init(context);
 EgameProxy.enableProxy(context);
