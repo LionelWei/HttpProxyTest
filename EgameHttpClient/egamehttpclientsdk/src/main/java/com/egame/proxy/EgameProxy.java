@@ -10,8 +10,10 @@ package com.egame.proxy;
 
 import android.content.Context;
 
+import com.android.volley.RequestQueue;
 import com.egame.proxy.support.ProxySocketFactory;
 import com.egame.proxy.support.glide.GlideProxy;
+import com.egame.proxy.support.volley.VolleyProxy;
 
 import okhttp3.OkHttpClient;
 
@@ -25,6 +27,10 @@ public class EgameProxy {
         lookupSubscription();
     }
 
+    public static void enableProxy(Context context) {
+        GlideProxy.init(context);
+    }
+
     public static OkHttpClient enableOkHttpProxy(OkHttpClient oldClient) {
         // 对于socks代理 new Proxy(SOCKS, ...) 不起作用
         // 得用socketFactory 可能是aosp的bug
@@ -35,9 +41,10 @@ public class EgameProxy {
                 .build();
     }
 
-    public static void enableProxy(Context context) {
-        GlideProxy.init(context);
+    public static RequestQueue enableVolleyProxy(Context context) {
+        return VolleyProxy.requestQueueWithProxy(context);
     }
+
 
     private static void lookupSubscription() {
         mIsVerified = true;

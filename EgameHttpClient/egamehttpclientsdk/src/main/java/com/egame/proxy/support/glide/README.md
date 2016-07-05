@@ -29,6 +29,6 @@ dependencies {
 在Application onCreate()添加:
 ```
 EgameProxy.init(context);
-EgameProxy.enableGlideProxy();
+EgameProxy.enableProxy(context);
 ```
 
