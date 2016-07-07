@@ -42,14 +42,16 @@ public class IonTest extends AbsHttp{
 
         Ion.with(mContext)
                 .load(DOWNLOAD_URL)
-                .proxy(ProxyUtil.PROXY_IP_OUTER, ProxyUtil.PROXY_PORT_OUTER)
+//                .proxy(ProxyUtil.PROXY_IP_OUTER, ProxyUtil.PROXY_PORT_OUTER)
+                .proxy(ProxyUtil.HTTP_PROXY_IP_INNER, ProxyUtil.HTTP_PROXY_PORT_INNER)
                 .setLogging("MyLogs", Log.VERBOSE)
                 .write(mDownFile)
                 .withResponse()
                 .setCallback(new FutureCallback<Response<File>>() {
                     @Override
                     public void onCompleted(Exception e, Response<File> result) {
-//                        Log.d("MY_PROXY", "code: " + result.getHeaders().code());
+                        Log.d("MY_PROXY", "code: " + result.getHeaders().code());
+                        mDownFile = result.getResult();
                         if (e != null) {
                             e.printStackTrace();
                         } else {

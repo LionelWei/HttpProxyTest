@@ -57,6 +57,7 @@ public class OkHttpTest extends AbsHttp{
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 int code = response.code();
+                Log.d("MY_PROXY", "okhttp status: " + code);
                 if (code == 200) {
                     ResponseBody responseBody = response.body();
                     InputStream in = responseBody.byteStream();

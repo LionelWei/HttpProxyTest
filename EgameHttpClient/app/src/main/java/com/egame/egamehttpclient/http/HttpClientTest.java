@@ -14,11 +14,15 @@ import android.util.Log;
 
 import com.egame.proxy.util.ProxyUtil;
 
+import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpVersion;
+import org.apache.http.auth.AuthScope;
+import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.conn.ClientConnectionManager;
+import org.apache.http.conn.params.ConnRouteParams;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -48,34 +52,24 @@ public class HttpClientTest extends AbsHttp {
 
 //                    Authenticator.setDefault(new MyAuthenticator("username",
 //                            "password"));
-                    HttpParams params = new BasicHttpParams();
-                    HttpConnectionParams.setConnectionTimeout(params, 10000);
-                    HttpConnectionParams.setSoTimeout(params, 10000);
-                    HttpProtocolParams.setVersion(params, HttpVersion.HTTP_1_1);
-                    HttpProtocolParams.setContentCharset(params, HTTP.UTF_8);
-
-                    SchemeRegistry registry = new SchemeRegistry();
-                    registry.register(new Scheme("http",
-                            new MyConnectionSocketFactory(), 80));
-                    ClientConnectionManager ccm = new ThreadSafeClientConnManager(
-                            params, registry);
-
-                    HttpConnectionParams.setConnectionTimeout(params,
-                            SET_CONNECTION_TIMEOUT);
-                    HttpConnectionParams.setSoTimeout(params,
-                            SET_SOCKET_TIMEOUT);
-                    HttpClient client = new DefaultHttpClient(ccm, params);
+                    HttpClient client = getHttpClient2();
                     try {
                         HttpGet request = new HttpGet(DOWNLOAD_URL);
+                        request.setHeader("Connection", "keep-alive");
+/*
                         System.out.println("Executing request " + request
                                 + " via SOCKS proxy " + ProxyUtil.SOCKET_ADDRESS);
+*/
                         HttpResponse response = client.execute(request);
                         try {
                             System.out
                                     .println("----------------------------------------");
                             System.out.println(response.getStatusLine());
 
-                            if (response.getStatusLine().getStatusCode() == 200) {
+                            int status = response.getStatusLine().getStatusCode();
+                            Log.d("MY_PROXY", "httpclient status: " + status);
+
+                            if (status == 200) {
 
                                 File directory = Environment.getExternalStorageDirectory();;
                                 File dir1 = new File(directory, "egame/downloader");
@@ -120,4 +114,44 @@ public class HttpClientTest extends AbsHttp {
             }
         }).start();
     }
+
+
+    private HttpClient getHttpClient1() {
+        HttpParams params = new BasicHttpParams();
+        HttpConnectionParams.setConnectionTimeout(params, 10000);
+        HttpConnectionParams.setSoTimeout(params, 10000);
+        HttpProtocolParams.setVersion(params, HttpVersion.HTTP_1_1);
+        HttpProtocolParams.setContentCharset(params, HTTP.UTF_8);
+
+        SchemeRegistry registry = new SchemeRegistry();
+        registry.register(new Scheme("http",
+                new MyConnectionSocketFactory(), 80));
+        ClientConnectionManager ccm = new ThreadSafeClientConnManager(
+                params, registry);
+
+        HttpConnectionParams.setConnectionTimeout(params,
+                SET_CONNECTION_TIMEOUT);
+        HttpConnectionParams.setSoTimeout(params,
+                SET_SOCKET_TIMEOUT);
+        HttpClient client = new DefaultHttpClient(ccm, params);
+        return client;
+    }
+
+    private HttpClient getHttpClient2() {
+        DefaultHttpClient httpClient = new DefaultHttpClient();
+
+        String proxyHost = ProxyUtil.HTTP_PROXY_IP_INNER;
+        int proxyPort = ProxyUtil.HTTP_PROXY_PORT_INNER;
+        String userName = "zhangqx";
+        String password = "12345";
+        httpClient.getCredentialsProvider().setCredentials(
+                new AuthScope(proxyHost, proxyPort),
+                new UsernamePasswordCredentials(userName, password));
+        HttpHost proxy = new HttpHost(proxyHost,proxyPort);
+
+        httpClient.getParams().setParameter(ConnRouteParams.DEFAULT_PROXY, proxy);
+        return httpClient;
+    }
+
+
 }
