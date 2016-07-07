@@ -140,8 +140,8 @@ public class HttpClientTest extends AbsHttp {
     private HttpClient getHttpClient2() {
         DefaultHttpClient httpClient = new DefaultHttpClient();
 
-        String proxyHost = ProxyUtil.HTTP_PROXY_IP_INNER;
-        int proxyPort = ProxyUtil.HTTP_PROXY_PORT_INNER;
+        String proxyHost = ProxyUtil.FIDDLER_PROXY_IP_INNER;
+        int proxyPort = ProxyUtil.FIDDLER_PROXY_PORT_INNER;
         String userName = "zhangqx";
         String password = "12345";
         httpClient.getCredentialsProvider().setCredentials(

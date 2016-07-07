@@ -35,19 +35,21 @@ public class OkHttpProxy {
         return oldClient.newBuilder()
                 .proxy(httpProxy)
 //                .socketFactory(new ProxySocketFactory())
-                .authenticator(new OkAuthenticator())
+                .proxyAuthenticator(new OkProxyAuthenticator())
                 .addInterceptor(new LoggingInterceptor())
                 .build();
     }
 
-    public static class OkAuthenticator implements Authenticator {
+    public static class OkProxyAuthenticator implements Authenticator {
         @Override
         public Request authenticate(Route route, Response response) throws IOException {
             String credential = Credentials.basic(
                     ProxyUtil.TEST_USER_NAME,
                     ProxyUtil.TEST_PASSWORD);
+            // 原始服务器字段: Authorization
+            // 代理服务器字段: Proxy-Authorization
             return response.request().newBuilder()
-                    .header("Authorization", credential)
+                    .header("Proxy-Authorization", credential)
                     .build();
         }
     }

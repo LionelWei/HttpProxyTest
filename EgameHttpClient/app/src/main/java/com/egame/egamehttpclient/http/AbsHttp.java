@@ -24,7 +24,8 @@ import java.io.IOException;
 
 public class AbsHttp {
 //    public static final String DOWNLOAD_URL = "http://open.play.cn/f/pkg/gm/000/001/766/ba4cf61eh1af4369/WSSGS.apk";
-    public static final String DOWNLOAD_URL = "http://open.play.cn/f/pkg/gm/000/001/766/ba4cf61eh1af4369/WSSGS.apk";
+//    public static final String DOWNLOAD_URL = "http://open.play.cn/f/pkg/gm/000/001/766/ba4cf61eh1af4369/WSSGS.apk";
+    public static final String DOWNLOAD_URL = "http://open.play.cn/api/v2/egame/host.json";
     public static final int SET_CONNECTION_TIMEOUT = 5 * 1000;
     public static final int SET_SOCKET_TIMEOUT = 20 * 1000;
 

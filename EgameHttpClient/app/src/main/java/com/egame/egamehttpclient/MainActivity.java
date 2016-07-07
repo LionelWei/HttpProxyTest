@@ -48,8 +48,8 @@ public class MainActivity extends AppCompatActivity {
 
 //        sendHttpPost(AbsHttp.DOWNLOAD_URL, null);
 //        Log.d("MY_PROXY", sendHttpPost(AbsHttp.DOWNLOAD_URL, null));
-//        HttpFactory.requestByClient(this, HttpFactory.CLIENT_HTTP_CLIENT);
-        HttpFactory.requestByClient(this, HttpFactory.CLIENT_OK_HTTP);
+        HttpFactory.requestByClient(this, HttpFactory.CLIENT_HTTP_CLIENT);
+//        HttpFactory.requestByClient(this, HttpFactory.CLIENT_OK_HTTP);
     }
 
     private static String sendHttpPost(String spec, String charset) {
