@@ -9,6 +9,7 @@ package com.egame.proxy.support.volley;
  */
 
 import com.android.volley.toolbox.HurlStack;
+import com.egame.proxy.EgameProxy;
 import com.egame.proxy.support.ProxySocketFactory;
 
 import java.io.IOException;
@@ -39,11 +40,13 @@ public class OkHttpStack extends HurlStack {
     }
 
     private OkHttpClient clientWithProxy(OkHttpClient okHttpClient) {
-        return okHttpClient
-                .newBuilder()
-                .socketFactory(new ProxySocketFactory())
-                .build();
+        OkHttpClient.Builder builder = okHttpClient.newBuilder();
+        if (EgameProxy.isProxyEnabled()) {
+            builder = builder.socketFactory(new ProxySocketFactory());
+        }
+        return builder.build();
     }
+
     @Override
     protected HttpURLConnection createConnection(URL url) throws IOException {
         OkUrlFactory okUrlFactory = new OkUrlFactory(okHttpClient);

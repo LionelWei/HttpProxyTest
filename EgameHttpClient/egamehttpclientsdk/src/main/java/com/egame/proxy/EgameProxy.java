@@ -14,6 +14,7 @@ import com.android.volley.RequestQueue;
 import com.egame.proxy.support.glide.GlideProxy;
 import com.egame.proxy.support.okhttp.OkHttpProxy;
 import com.egame.proxy.support.volley.VolleyProxy;
+import com.egame.proxy.util.NetworkUtil;
 
 import okhttp3.OkHttpClient;
 
@@ -21,27 +22,54 @@ public class EgameProxy {
 
     private static Context mContext;
     private static boolean mIsVerified = false;
+    private static boolean mIsProxyEnabled = true;
 
     public static void init(Context context) {
         mContext = context;
+        // 检查网络状态
+        handleNetwork();
+        // 查询订阅情况
         lookupSubscription();
     }
 
-    public static void enableProxy() {
+    public static void setProxy() {
         GlideProxy.init(mContext);
     }
 
-    public static OkHttpClient enableOkHttpProxy(OkHttpClient oldClient) {
+    public static OkHttpClient setOkHttpProxy(OkHttpClient oldClient) {
         return OkHttpProxy.clientWithProxy(oldClient);
     }
 
-    public static RequestQueue enableVolleyProxy() {
+    public static RequestQueue setVolleyProxy() {
         return VolleyProxy.requestQueueWithProxy(mContext);
     }
 
+    public static void setProxyEnabled(boolean enabled) {
+        mIsProxyEnabled = enabled;
+    }
+
+    public static boolean isProxyEnabled() {
+        return mIsProxyEnabled;
+    }
 
     private static void lookupSubscription() {
         mIsVerified = true;
     }
 
+    private static void handleNetwork() {
+        int state = NetworkUtil.checkState(mContext);
+        // 移动网络时 设置代理
+        // WIFI时 切断代理直接访问原始服务器
+        switch (state) {
+            case NetworkUtil.NETWORK_WIFI:
+                // !!! 仅供测试 实际状态与此相反 TODO
+                EgameProxy.setProxyEnabled(true);
+                break;
+            case NetworkUtil.NETWORK_4G:
+            case NetworkUtil.NETWORK_3G2G:
+                // !!! 仅供测试 实际状态与此相反 TODO
+                EgameProxy.setProxyEnabled(false);
+                break;
+        }
+    }
 }

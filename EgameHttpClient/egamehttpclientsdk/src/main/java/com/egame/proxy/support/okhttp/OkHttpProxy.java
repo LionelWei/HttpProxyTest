@@ -10,6 +10,7 @@ package com.egame.proxy.support.okhttp;
 
 import android.util.Log;
 
+import com.egame.proxy.EgameProxy;
 import com.egame.proxy.util.ProxyUtil;
 
 import java.io.IOException;
@@ -26,16 +27,19 @@ import okhttp3.Route;
 
 public class OkHttpProxy {
     public static OkHttpClient clientWithProxy(OkHttpClient oldClient) {
-        // 对于socks代理 new Proxy(SOCKS, ...) 不起作用
-        // 得用socketFactory 可能是aosp的bug
-        Proxy httpProxy = new Proxy(Proxy.Type.HTTP,
-                InetSocketAddress.createUnresolved(
-                        ProxyUtil.FIDDLER_PROXY_IP_INNER,
-                        ProxyUtil.FIDDLER_PROXY_PORT_INNER));
-        return oldClient.newBuilder()
-                .proxy(httpProxy)
-//                .socketFactory(new ProxySocketFactory())
-                .proxyAuthenticator(new OkProxyAuthenticator())
+        OkHttpClient.Builder builder = oldClient.newBuilder();
+        if (EgameProxy.isProxyEnabled()) {
+            // 对于socks代理 new Proxy(SOCKS, ...) 不起作用
+            // 得用socketFactory 可能是aosp的bug
+            Proxy httpProxy = new Proxy(Proxy.Type.HTTP,
+                    InetSocketAddress.createUnresolved(
+                            ProxyUtil.FIDDLER_PROXY_IP_INNER,
+                            ProxyUtil.FIDDLER_PROXY_PORT_INNER));
+            builder = builder
+                    .proxy(httpProxy)
+                    .proxyAuthenticator(new OkProxyAuthenticator());
+        }
+        return builder
                 .addInterceptor(new LoggingInterceptor())
                 .build();
     }

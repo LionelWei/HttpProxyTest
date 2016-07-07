@@ -14,6 +14,7 @@ import android.util.Log;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.integration.okhttp3.OkHttpUrlLoader;
 import com.bumptech.glide.load.model.GlideUrl;
+import com.egame.proxy.EgameProxy;
 import com.egame.proxy.support.ProxySocketFactory;
 import com.egame.proxy.util.ProxyUtil;
 
@@ -27,9 +28,11 @@ public class GlideProxy {
             Class.forName("okhttp3.OkHttpClient");
             Class.forName("com.bumptech.glide.Glide");
 
-            OkHttpClient client = new OkHttpClient.Builder()
-                    .socketFactory(new ProxySocketFactory())
-                    .build();
+            OkHttpClient.Builder builder = new OkHttpClient.Builder();
+            if (EgameProxy.isProxyEnabled()) {
+                builder = builder.socketFactory(new ProxySocketFactory());
+            }
+            OkHttpClient client = builder.build();
             Glide.get(context)
                     .register(GlideUrl.class, InputStream.class,
                             new OkHttpUrlLoader.Factory(client));

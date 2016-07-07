@@ -46,7 +46,7 @@ public class OkHttpTest extends AbsHttp{
                 .Builder()
                 .build();
 
-        client = EgameProxy.enableOkHttpProxy(client);
+        client = EgameProxy.setOkHttpProxy(client);
 
         final Request request = new Request
                 .Builder()
