@@ -18,6 +18,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.SocketException;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -75,8 +76,13 @@ public class OkHttpTest extends AbsHttp{
                             mDownFile);
                     byte b[] = new byte[1024];
                     int j = 0;
-                    while ((j = in.read(b)) != -1) {
-                        outputStream.write(b, 0, j);
+                    try {
+                        while ((j = in.read(b)) != -1) {
+                            outputStream.write(b, 0, j);
+                        }
+                    } catch (SocketException e) {
+                        Log.e("MY_PROXY", "SocketException");
+                        e.printStackTrace();
                     }
 
                     installApk();
