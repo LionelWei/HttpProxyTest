@@ -13,6 +13,8 @@ import android.os.Environment;
 import android.util.Log;
 
 import com.egame.proxy.EgameProxy;
+import com.egame.proxy.exception.EgameProxyException;
+import com.egame.proxy.support.okhttp.EgameOkHttpClient;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -43,64 +45,68 @@ public class OkHttpTest extends AbsHttp{
     }
 
     private void doStart() {
-        OkHttpClient client = new OkHttpClient
+        OkHttpClient original = new OkHttpClient
                 .Builder()
                 .build();
 
-        client = EgameProxy.setOkHttpProxy(client);
+        EgameOkHttpClient client = EgameProxy.setOkHttpProxy(original);
 
         final Request request = new Request
                 .Builder()
                 .url(DOWNLOAD_URL)
                 .build();
 
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                int code = response.code();
-                Log.d("MY_PROXY", "okhttp status: " + code);
-                if (code == 200) {
-                    ResponseBody responseBody = response.body();
-                    InputStream in = responseBody.byteStream();
+        try {
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    int code = response.code();
+                    Log.d("MY_PROXY", "okhttp status: " + code);
+                    if (code == 200) {
+                        ResponseBody responseBody = response.body();
+                        InputStream in = responseBody.byteStream();
 
-                    File directory = Environment.getExternalStorageDirectory();;
-                    File dir1 = new File(directory, "egame/downloader");
-                    Log.d("MY_PROXY", "dir1: " + dir1.getAbsolutePath());
-                    if(prepare(dir1.getAbsolutePath(), "1.apk", DOWNLOAD_URL)){
-                        System.out.println("创建文件成功");
+                        File directory = Environment.getExternalStorageDirectory();;
+                        File dir1 = new File(directory, "egame/downloader");
+                        Log.d("MY_PROXY", "dir1: " + dir1.getAbsolutePath());
+                        if(prepare(dir1.getAbsolutePath(), "1.apk", DOWNLOAD_URL)){
+                            System.out.println("创建文件成功");
 
-                    }
-                    System.out.println("++++++++++++++");
-
-                    FileOutputStream outputStream = new FileOutputStream(
-                            mDownFile);
-                    byte b[] = new byte[1024];
-                    int j = 0;
-                    try {
-                        while ((j = in.read(b)) != -1) {
-                            outputStream.write(b, 0, j);
                         }
-                    } catch (SocketException e) {
-                        Log.e("MY_PROXY", "SocketException");
-                        e.printStackTrace();
+                        System.out.println("++++++++++++++");
+
+                        FileOutputStream outputStream = new FileOutputStream(
+                                mDownFile);
+                        byte b[] = new byte[1024];
+                        int j = 0;
+                        try {
+                            while ((j = in.read(b)) != -1) {
+                                outputStream.write(b, 0, j);
+                            }
+                        } catch (SocketException e) {
+                            Log.e("MY_PROXY", "SocketException");
+                            e.printStackTrace();
+                        }
+
+                        installApk();
+
+                        outputStream.flush();
+                        outputStream.close();
+                        responseBody.close();
+
+                        updateView();
                     }
-
-                    installApk();
-
-                    outputStream.flush();
-                    outputStream.close();
-                    responseBody.close();
-
-                    updateView();
                 }
-            }
 
-            @Override
-            public void onFailure(Call call, IOException e) {
-                Log.d("MY_OKHTTP", "failed");
-                e.printStackTrace();
-            }
-        });
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    Log.d("MY_OKHTTP", "failed");
+                    e.printStackTrace();
+                }
+            });
+        } catch (EgameProxyException e) {
+            e.printStackTrace();
+        }
     }
 
 }

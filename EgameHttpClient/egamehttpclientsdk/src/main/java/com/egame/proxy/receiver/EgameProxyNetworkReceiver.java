@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.egame.proxy.EgameProxy;
+import com.egame.proxy.listener.NetworkEventBus;
 import com.egame.proxy.util.NetworkUtil;
 
 public class EgameProxyNetworkReceiver extends BroadcastReceiver {
@@ -35,5 +36,6 @@ public class EgameProxyNetworkReceiver extends BroadcastReceiver {
                 EgameProxy.setProxyEnabled(true);
                 break;
         }
+        NetworkEventBus.getDefault().post(state);
     }
 }

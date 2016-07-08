@@ -116,6 +116,7 @@ public class HttpClientTest extends AbsHttp {
     }
 
 
+    @SuppressWarnings("all")
     private HttpClient getHttpClient1() {
         HttpParams params = new BasicHttpParams();
         HttpConnectionParams.setConnectionTimeout(params, 10000);

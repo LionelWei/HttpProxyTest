@@ -12,8 +12,8 @@ import android.content.Context;
 
 import com.android.volley.RequestQueue;
 import com.egame.proxy.support.glide.GlideProxy;
-import com.egame.proxy.support.okhttp.OkHttpProxy;
-import com.egame.proxy.support.volley.VolleyProxy;
+import com.egame.proxy.support.okhttp.EgameOkHttpClient;
+import com.egame.proxy.support.volley.EgameRequestQueue;
 import com.egame.proxy.util.NetworkUtil;
 
 import okhttp3.OkHttpClient;
@@ -36,12 +36,12 @@ public class EgameProxy {
         GlideProxy.init(mContext);
     }
 
-    public static OkHttpClient setOkHttpProxy(OkHttpClient oldClient) {
-        return OkHttpProxy.clientWithProxy(oldClient);
+    public static EgameOkHttpClient setOkHttpProxy(OkHttpClient oldClient) {
+        return new EgameOkHttpClient(oldClient);
     }
 
     public static RequestQueue setVolleyProxy() {
-        return VolleyProxy.requestQueueWithProxy(mContext);
+        return EgameRequestQueue.requestQueueWithProxy(mContext);
     }
 
     public static void setProxyEnabled(boolean enabled) {
@@ -50,6 +50,10 @@ public class EgameProxy {
 
     public static boolean isProxyEnabled() {
         return mIsProxyEnabled;
+    }
+
+    public static Context getContext() {
+        return mContext;
     }
 
     private static void lookupSubscription() {
@@ -72,4 +76,5 @@ public class EgameProxy {
                 break;
         }
     }
+
 }

@@ -10,6 +10,6 @@ dependencies {
 - 初始化
 ```
 EgameProxy.init(context);
-OkHttpClient client = new OkHttpClient.Builder().build();
-client = EgameProxy.enableProxy(client);
 ```
+~~OkHttpClient client = new OkHttpClient.Builder().build();~~
+~~client = EgameProxy.enableProxy(client);~~
