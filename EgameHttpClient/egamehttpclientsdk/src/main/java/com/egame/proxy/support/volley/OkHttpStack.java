@@ -41,7 +41,7 @@ public class OkHttpStack extends HurlStack {
 
     private OkHttpClient clientWithProxy(OkHttpClient okHttpClient) {
         OkHttpClient.Builder builder = okHttpClient.newBuilder();
-        if (EgameProxy.isProxyEnabled()) {
+        if (EgameProxy.get().isProxyEnabled()) {
             builder = builder.socketFactory(new ProxySocketFactory());
         }
         return builder.build();

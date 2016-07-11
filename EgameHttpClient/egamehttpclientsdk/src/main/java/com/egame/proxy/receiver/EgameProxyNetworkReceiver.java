@@ -29,11 +29,11 @@ public class EgameProxyNetworkReceiver extends BroadcastReceiver {
         // WIFI时 切断代理直接访问原始服务器
         switch (state) {
             case NetworkUtil.NETWORK_WIFI:
-                EgameProxy.setProxyEnabled(false);
+                EgameProxy.get().setProxyEnabled(false);
                 break;
             case NetworkUtil.NETWORK_4G:
             case NetworkUtil.NETWORK_3G2G:
-                EgameProxy.setProxyEnabled(true);
+                EgameProxy.get().setProxyEnabled(true);
                 break;
         }
         NetworkEventBus.getDefault().post(state);

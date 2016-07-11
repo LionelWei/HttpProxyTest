@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
 //        sendHttpPost(AbsHttp.DOWNLOAD_URL, null);
 //        Log.d("MY_PROXY", sendHttpPost(AbsHttp.DOWNLOAD_URL, null));
 //        HttpFactory.requestByClient(this, HttpFactory.CLIENT_HTTP_CLIENT);
-        EgameProxy.init(this);
+        EgameProxy.get().init(this);
         HttpFactory.requestByClient(this, HttpFactory.CLIENT_OK_HTTP);
     }
 

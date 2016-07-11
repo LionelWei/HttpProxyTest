@@ -165,7 +165,7 @@ public class EgameOkHttpClient {
 
     private OkHttpClient clientWithProxy(OkHttpClient oldClient) {
         OkHttpClient.Builder builder = oldClient.newBuilder();
-        if (EgameProxy.isProxyEnabled()) {
+        if (EgameProxy.get().isProxyEnabled()) {
             // 对于socks代理 new Proxy(SOCKS, ...) 不起作用
             // 得用socketFactory 可能是aosp的bug
             Proxy httpProxy = new Proxy(Proxy.Type.HTTP,
