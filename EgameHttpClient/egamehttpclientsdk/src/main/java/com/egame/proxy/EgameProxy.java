@@ -17,19 +17,17 @@ import com.egame.proxy.support.okhttp.EgameOkHttpClient;
 import com.egame.proxy.support.volley.EgameRequestQueue;
 import com.egame.proxy.util.NetworkUtil;
 
-import java.util.ArrayList;
+import java.net.InetSocketAddress;
 import java.util.List;
 
 import okhttp3.OkHttpClient;
 
-public class EgameProxy implements HostService.IServiceListener{
+public class EgameProxy{
 
     private Context mContext;
     // (初始值)禁用代理
     private boolean mIsProxyEnabled = true;
-    // (初始值)流量已超限
-    private boolean mIsDataUsageAvailable = true;
-    private List<String> mIpPool = new ArrayList<>();
+    private HostService mService;
     private String mAppId;
     private String mUserId;
     private String mChannelCode;
@@ -38,6 +36,7 @@ public class EgameProxy implements HostService.IServiceListener{
 
     // 单例
     private EgameProxy() {
+        mService = new HostService(new ServiceListener());
     }
 
     public static EgameProxy get() {
@@ -46,9 +45,7 @@ public class EgameProxy implements HostService.IServiceListener{
 
     public void init(Context context) {
         mContext = context.getApplicationContext();
-
-        HostService service = new HostService(this);
-        service.initService();
+        mService.initService();
         // 检查网络状态
         handleNetwork();
     }
@@ -93,22 +90,16 @@ public class EgameProxy implements HostService.IServiceListener{
         this.mChannelCode = channelCode;
     }
 
+    public boolean isProxyAvailable() {
+        return mIsProxyEnabled && DataUsage.isDataUsageAvailable();
+    }
+
     public boolean isProxyEnabled() {
         return mIsProxyEnabled;
     }
 
     public Context getContext() {
         return mContext;
-    }
-
-    @Override
-    public void onIpPoolChanged(List<String> ipPool) {
-        mIpPool = ipPool;
-    }
-
-    @Override
-    public void onDataUsageAvailable(boolean isAvailable) {
-        mIsDataUsageAvailable = isAvailable;
     }
 
     private void handleNetwork() {
@@ -125,6 +116,20 @@ public class EgameProxy implements HostService.IServiceListener{
                 // !!! 仅供测试 实际状态与此相反 TODO
                 setProxyEnabled(false);
                 break;
+        }
+    }
+
+    private class ServiceListener implements HostService.IServiceListener {
+        @Override
+        public void onIpPoolChanged(List<InetSocketAddress> httpSocketAddresses,
+                                    List<InetSocketAddress> socksSocketAddresses) {
+            EgameProxySelector.get().setHttpProxyPool(httpSocketAddresses);
+            EgameProxySelector.get().setSocksProxyPool(socksSocketAddresses);
+        }
+
+        @Override
+        public void onDataUsageAvailable(boolean isAvailable) {
+            DataUsage.setDataUsageAvailable(isAvailable);
         }
     }
 

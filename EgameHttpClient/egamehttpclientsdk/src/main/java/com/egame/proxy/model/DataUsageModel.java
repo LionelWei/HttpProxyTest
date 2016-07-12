@@ -28,5 +28,23 @@ public class DataUsageModel {
 
     public static class ExtBean {
         public boolean flag;
+
+        @Override
+        public String toString() {
+            return "ExtBean{" +
+                    "flag=" + flag +
+                    '}';
+        }
+    }
+
+
+    @Override
+    public String toString() {
+        return "DataUsageModel{" +
+                "text='" + text + '\'' +
+                ", attach=" + attach +
+                ", ext=" + ext +
+                ", code=" + code +
+                '}';
     }
 }

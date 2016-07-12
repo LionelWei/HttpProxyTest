@@ -9,17 +9,10 @@ package com.egame.proxy.util;
  */
 
 import java.net.InetSocketAddress;
+import java.util.List;
 
 public class ProxyUtil {
     public static final String TAG = "EgameProxy";
-/*
-    static {
-        System.loadLibrary("EgameProxy");
-    }
-    public static native String getIp();
-    public static native int getPort();
-*/
-
     public static final String TEST_USER_NAME = "zhangqx";
     public static final String TEST_PASSWORD = "12345678";
 
@@ -42,4 +35,5 @@ public class ProxyUtil {
             = InetSocketAddress.createUnresolved(PROXY_IP_INNER,PROXY_PORT_INNER);
     public static final InetSocketAddress HTTP_SOCKET_ADDRESS
             = InetSocketAddress.createUnresolved(HTTP_PROXY_IP_INNER,HTTP_PROXY_PORT_INNER);
+
 }

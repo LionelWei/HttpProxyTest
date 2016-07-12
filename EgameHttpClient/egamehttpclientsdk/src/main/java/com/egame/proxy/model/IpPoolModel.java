@@ -30,5 +30,23 @@ public class IpPoolModel {
     public static class ExtBean {
         public String http;
         public String socks;
+
+        @Override
+        public String toString() {
+            return "ExtBean{" +
+                    "http='" + http + '\'' +
+                    ", socks='" + socks + '\'' +
+                    '}';
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "IpPoolModel{" +
+                "text='" + text + '\'' +
+                ", attach=" + attach +
+                ", ext=" + ext +
+                ", code=" + code +
+                '}';
     }
 }

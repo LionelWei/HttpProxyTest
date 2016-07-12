@@ -17,16 +17,19 @@ public class RestApiImpl implements RestApi{
     private static OkHttpClient sInstance = new OkHttpClient();
 
     public Call getIpPool() {
-        Request request = new Request.Builder().url(RestApi.DATA_USAGE_URL).build();
+        Request request = new Request
+                .Builder()
+                .url(RestApi.IP_POOL_URL)
+                .build();
         return sInstance.newCall(request);
     }
     public Call getDataUsage(String appId, String userId, String channelCode) {
         Request request = new Request
                 .Builder()
-                .url(RestApi.IP_POOL_URL)
-                .addHeader("app_id", appId)
-                .addHeader("user_id", userId)
-                .addHeader("channel_code", channelCode)
+                .url(RestApi.DATA_USAGE_URL)
+                .addHeader("app_id", (appId == null) ? "" : appId)
+                .addHeader("user_id", (userId == null) ? "": userId)
+                .addHeader("channel_code", (channelCode == null) ? "" : channelCode)
                 .build();
         return sInstance.newCall(request);
     }

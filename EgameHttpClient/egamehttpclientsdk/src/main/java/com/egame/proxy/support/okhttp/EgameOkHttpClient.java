@@ -11,6 +11,7 @@ package com.egame.proxy.support.okhttp;
 import android.util.Log;
 
 import com.egame.proxy.EgameProxy;
+import com.egame.proxy.EgameProxySelector;
 import com.egame.proxy.util.ProxyUtil;
 
 import java.io.IOException;
@@ -165,16 +166,17 @@ public class EgameOkHttpClient {
 
     private OkHttpClient clientWithProxy(OkHttpClient oldClient) {
         OkHttpClient.Builder builder = oldClient.newBuilder();
-        if (EgameProxy.get().isProxyEnabled()) {
+        if (EgameProxy.get().isProxyAvailable()) {
             // 对于socks代理 new Proxy(SOCKS, ...) 不起作用
             // 得用socketFactory 可能是aosp的bug
-            Proxy httpProxy = new Proxy(Proxy.Type.HTTP,
-                    InetSocketAddress.createUnresolved(
-                            ProxyUtil.FIDDLER_PROXY_IP_INNER,
-                            ProxyUtil.FIDDLER_PROXY_PORT_INNER));
-            builder = builder
-                    .proxy(httpProxy)
-                    .proxyAuthenticator(new OkProxyAuthenticator());
+            InetSocketAddress address =
+                    EgameProxySelector.get().getOptimalHttpProxy();
+            if (address != null) {
+                Proxy httpProxy = new Proxy(Proxy.Type.HTTP, address);
+                builder = builder
+                        .proxy(httpProxy)
+                        .proxyAuthenticator(new OkProxyAuthenticator());
+            }
         }
         return builder
                 .addInterceptor(new LoggingInterceptor())

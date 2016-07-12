@@ -29,7 +29,7 @@ public class GlideProxy {
             Class.forName("com.bumptech.glide.Glide");
 
             OkHttpClient.Builder builder = new OkHttpClient.Builder();
-            if (EgameProxy.get().isProxyEnabled()) {
+            if (EgameProxy.get().isProxyAvailable()) {
                 builder = builder.socketFactory(new ProxySocketFactory());
             }
             OkHttpClient client = builder.build();
