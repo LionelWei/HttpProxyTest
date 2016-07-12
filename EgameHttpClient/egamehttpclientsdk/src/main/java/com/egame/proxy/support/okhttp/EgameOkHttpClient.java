@@ -12,6 +12,7 @@ import android.util.Log;
 
 import com.egame.proxy.EgameProxy;
 import com.egame.proxy.EgameProxySelector;
+import com.egame.proxy.SignatureGenerator;
 import com.egame.proxy.util.ProxyUtil;
 
 import java.io.IOException;
@@ -169,25 +170,30 @@ public class EgameOkHttpClient {
         if (EgameProxy.get().isProxyAvailable()) {
             // 对于socks代理 new Proxy(SOCKS, ...) 不起作用
             // 得用socketFactory 可能是aosp的bug
+            Log.d(ProxyUtil.TAG, "Proxy is available");
             InetSocketAddress address =
                     EgameProxySelector.get().getOptimalHttpProxy();
             if (address != null) {
+                Log.d(ProxyUtil.TAG, "Proxy is available2");
                 Proxy httpProxy = new Proxy(Proxy.Type.HTTP, address);
                 builder = builder
                         .proxy(httpProxy)
                         .proxyAuthenticator(new OkProxyAuthenticator());
             }
+        } else {
+            Log.d(ProxyUtil.TAG, "Proxy is invalid");
         }
         return builder
-                .addInterceptor(new LoggingInterceptor())
+                .addNetworkInterceptor(new LoggingInterceptor())
                 .build();
     }
 
     public static class OkProxyAuthenticator implements Authenticator {
         @Override
         public Request authenticate(Route route, Response response) throws IOException {
+            SignatureGenerator generator = new SignatureGenerator();
             String credential = Credentials.basic(
-                    ProxyUtil.TEST_USER_NAME,
+                    generator.getSignature(),
                     ProxyUtil.TEST_PASSWORD);
             // 原始服务器字段: Authorization
             // 代理服务器字段: Proxy-Authorization
@@ -206,8 +212,8 @@ public class EgameOkHttpClient {
             Response response = chain.proceed(request);
 
             long t2 = System.nanoTime();
-            Log.d("MY_PROXY", String.format("Received response for %s in %.1fms%n%s",
-                    request.url(), (t2 - t1) / 1e6d, response.headers()));
+            Log.d("MY_PROXY", String.format("Received response for %s in %.1fms code:%d%n%s",
+                    request.url(), (t2 - t1) / 1e6d, response.code(), response.headers()));
             return response;
         }
     }

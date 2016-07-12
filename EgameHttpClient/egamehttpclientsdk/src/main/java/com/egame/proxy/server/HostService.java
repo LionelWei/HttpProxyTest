@@ -58,7 +58,7 @@ public class HostService {
                 String[] socksProxyArray = model.ext.socks.split(",");
                 List<InetSocketAddress> httpProxyList = new ArrayList<InetSocketAddress>();
                 for (String s : httpProxyArray) {
-                    String[] pair = s.split(",");
+                    String[] pair = s.split(":");
                     if (pair.length == 2) {
                         String ip = pair[0];
                         int port = Integer.valueOf(pair[1]);
@@ -69,7 +69,7 @@ public class HostService {
                 }
                 List<InetSocketAddress> socksProxyList = new ArrayList<InetSocketAddress>();
                 for (String s : socksProxyArray) {
-                    String[] pair = s.split(",");
+                    String[] pair = s.split(":");
                     if (pair.length == 2) {
                         String ip = pair[0];
                         int port = Integer.valueOf(pair[1]);
