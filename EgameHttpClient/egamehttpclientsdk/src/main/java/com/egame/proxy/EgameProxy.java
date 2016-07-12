@@ -11,6 +11,8 @@ package com.egame.proxy;
 import android.content.Context;
 
 import com.android.volley.RequestQueue;
+import com.egame.proxy.server.DataUsage;
+import com.egame.proxy.server.EgameProxySelector;
 import com.egame.proxy.server.HostService;
 import com.egame.proxy.support.glide.GlideProxy;
 import com.egame.proxy.support.okhttp.EgameOkHttpClient;

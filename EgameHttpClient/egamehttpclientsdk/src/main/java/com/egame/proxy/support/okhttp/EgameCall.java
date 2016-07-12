@@ -8,11 +8,15 @@ package com.egame.proxy.support.okhttp;
  * History:		2016/7/8 1.00 初始版本
  */
 
+import android.util.Log;
+
 import com.egame.proxy.EgameProxy;
 import com.egame.proxy.exception.EgameProxyException;
 import com.egame.proxy.listener.INetworkStateListener;
 import com.egame.proxy.listener.NetworkEventBus;
+import com.egame.proxy.server.HostService;
 import com.egame.proxy.util.NetworkUtil;
+import com.egame.proxy.util.ProxyUtil;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -21,18 +25,23 @@ import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
 public class EgameCall implements INetworkStateListener{
     private Call mDelegate;
+    private EgameOkHttpClient mClient;
+    private Request mRequest;
 
     // 只有异步调用才需要队列
     // 同步的直接在调用时处理
     private static List<EgameCall> sAsyncCallQueue = new ArrayList<>();
 
-    public EgameCall(Call call) {
+    public EgameCall(Call call, Request request, EgameOkHttpClient client) {
         this.mDelegate = call;
+        mRequest = request;
+        mClient = client;
     }
 
     public Request request() {
@@ -41,6 +50,11 @@ public class EgameCall implements INetworkStateListener{
 
     public Response execute() throws EgameProxyException, IOException {
         checkProxy();
+        while(HostService.isPoolLocked || HostService.isDataLocked) {
+            // wait
+        }
+        OkHttpClient newClient = mClient.clientWithProxy(mClient.delegate());
+        mDelegate = newClient.newCall(mRequest);
         return mDelegate.execute();
     }
 
@@ -48,11 +62,23 @@ public class EgameCall implements INetworkStateListener{
         return mDelegate.isExecuted();
     }
 
-    public void enqueue(Callback responseCallback) throws EgameProxyException {
+    public void enqueue(final Callback responseCallback) throws EgameProxyException {
         cancelCallWhenMobileWithOutProxy();
         checkProxy();
-        sAsyncCallQueue.add(this);
-        mDelegate.enqueue(responseCallback);
+        // 由于要等待notify, 所以另起一个线程
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while(HostService.isPoolLocked || HostService.isDataLocked) {
+                    Log.d(ProxyUtil.TAG, "waiting...");
+                    // wait
+                }
+                OkHttpClient newClient = mClient.clientWithProxy(mClient.delegate());
+                mDelegate = newClient.newCall(mRequest);
+                sAsyncCallQueue.add(EgameCall.this);
+                mDelegate.enqueue(responseCallback);
+            }
+        }).start();
     }
 
     public boolean isCanceled() {

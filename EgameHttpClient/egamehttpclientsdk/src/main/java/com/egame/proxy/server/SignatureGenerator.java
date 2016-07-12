@@ -1,4 +1,4 @@
-package com.egame.proxy;
+package com.egame.proxy.server;
 
 /*
  * FileName:    
@@ -37,6 +37,7 @@ channel_code= 9999 9999
 110, 28aec797, 99 9999 9999, 99 9999 9999, 9999 9999, xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
 */
 
+import com.egame.proxy.EgameProxy;
 import com.egame.proxy.util.KeyUtil;
 
 import java.security.MessageDigest;

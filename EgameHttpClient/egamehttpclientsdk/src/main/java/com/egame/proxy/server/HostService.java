@@ -26,6 +26,8 @@ import okhttp3.Callback;
 import okhttp3.Response;
 
 public class HostService {
+    public static volatile boolean isPoolLocked = false;
+    public static volatile boolean isDataLocked = false;
     private IServiceListener mListener;
     private RestApi mRestApi;
 
@@ -47,6 +49,7 @@ public class HostService {
 
     private void checkIpPool() {
         Call call = mRestApi.getIpPool();
+        isPoolLocked = true;
         call.enqueue(new Callback() {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
@@ -80,6 +83,7 @@ public class HostService {
                 }
 
                 mListener.onIpPoolChanged(httpProxyList, socksProxyList);
+                isPoolLocked = false;
             }
 
             @Override
@@ -91,6 +95,7 @@ public class HostService {
     }
 
     private void checkDataUsage() {
+        isDataLocked = true;
         String appId = EgameProxy.get().getAppId();
         String userId = EgameProxy.get().getUserId();
         String channelCode = EgameProxy.get().getChannelCode();
@@ -104,6 +109,7 @@ public class HostService {
                 Log.d(ProxyUtil.TAG, model.toString());
                 boolean isAvailable = model.ext.flag;
                 mListener.onDataUsageAvailable(isAvailable);
+                isDataLocked = false;
             }
 
             @Override

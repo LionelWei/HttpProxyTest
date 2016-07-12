@@ -1,4 +1,4 @@
-package com.egame.proxy;
+package com.egame.proxy.server;
 
 /*
  * FileName:    

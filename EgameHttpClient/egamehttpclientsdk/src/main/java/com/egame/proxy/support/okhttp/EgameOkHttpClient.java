@@ -11,8 +11,8 @@ package com.egame.proxy.support.okhttp;
 import android.util.Log;
 
 import com.egame.proxy.EgameProxy;
-import com.egame.proxy.EgameProxySelector;
-import com.egame.proxy.SignatureGenerator;
+import com.egame.proxy.server.EgameProxySelector;
+import com.egame.proxy.server.SignatureGenerator;
 import com.egame.proxy.util.ProxyUtil;
 
 import java.io.IOException;
@@ -64,7 +64,7 @@ public class EgameOkHttpClient {
      */
     public EgameCall newCall(Request request) {
         Call call = mDelegate.newCall(request);
-        return new EgameCall(call);
+        return new EgameCall(call, request, this);
     }
 
     // OkHttpClient原始函数
@@ -164,8 +164,11 @@ public class EgameOkHttpClient {
         return mDelegate.connectionPool();
     }
 
+    /*package*/ OkHttpClient delegate() {
+        return mDelegate;
+    }
 
-    private OkHttpClient clientWithProxy(OkHttpClient oldClient) {
+    /*package*/ OkHttpClient clientWithProxy(OkHttpClient oldClient) {
         OkHttpClient.Builder builder = oldClient.newBuilder();
         if (EgameProxy.get().isProxyAvailable()) {
             // 对于socks代理 new Proxy(SOCKS, ...) 不起作用

@@ -51,13 +51,6 @@ public class MainActivity extends AppCompatActivity {
 //        Log.d("MY_PROXY", sendHttpPost(AbsHttp.DOWNLOAD_URL, null));
 //        HttpFactory.requestByClient(this, HttpFactory.CLIENT_HTTP_CLIENT);
         EgameProxy.get().init(this);
-        try {
-            Log.d("Thread", "sleep start");
-            Thread.sleep(10000);
-            Log.d("Thread", "sleep end");
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         HttpFactory.requestByClient(this, HttpFactory.CLIENT_OK_HTTP);
     }
 
