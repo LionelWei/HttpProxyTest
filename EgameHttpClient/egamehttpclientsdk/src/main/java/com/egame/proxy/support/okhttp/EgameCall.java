@@ -8,15 +8,12 @@ package com.egame.proxy.support.okhttp;
  * History:		2016/7/8 1.00 初始版本
  */
 
-import android.util.Log;
-
 import com.egame.proxy.EgameProxy;
 import com.egame.proxy.exception.EgameProxyException;
 import com.egame.proxy.listener.INetworkStateListener;
 import com.egame.proxy.listener.NetworkEventBus;
 import com.egame.proxy.server.HostService;
 import com.egame.proxy.util.NetworkUtil;
-import com.egame.proxy.util.ProxyUtil;
 
 import java.io.IOException;
 import java.util.ArrayList;

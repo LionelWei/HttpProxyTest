@@ -15,6 +15,7 @@ import com.egame.proxy.server.DataUsage;
 import com.egame.proxy.server.EgameProxySelector;
 import com.egame.proxy.server.HostService;
 import com.egame.proxy.support.glide.GlideProxy;
+import com.egame.proxy.support.ion.IonProxy;
 import com.egame.proxy.support.okhttp.EgameOkHttpClient;
 import com.egame.proxy.support.volley.EgameRequestQueue;
 import com.egame.proxy.util.NetworkUtil;
@@ -24,7 +25,7 @@ import java.util.List;
 
 import okhttp3.OkHttpClient;
 
-public class EgameProxy{
+public class EgameProxy {
 
     private Context mContext;
     // (初始值)禁用代理
@@ -52,8 +53,9 @@ public class EgameProxy{
         handleNetwork();
     }
 
-    public void setProxy() {
+    /*package*/ void initProxy() {
         GlideProxy.init(mContext);
+        IonProxy.initIonProxy(mContext);
     }
 
     public EgameOkHttpClient setOkHttpProxy(OkHttpClient oldClient) {
@@ -65,7 +67,10 @@ public class EgameProxy{
     }
 
     public void setProxyEnabled(boolean enabled) {
-        mIsProxyEnabled = enabled;
+        if (mIsProxyEnabled != enabled) {
+            mIsProxyEnabled = enabled;
+            initProxy();
+        }
     }
 
     public String getAppId() {
@@ -92,11 +97,7 @@ public class EgameProxy{
         this.mChannelCode = channelCode;
     }
 
-    private boolean isEnabled = true;
     public boolean isProxyAvailable() {
-        // test only
-//        isEnabled = !isEnabled;
-//        return isEnabled;
         return mIsProxyEnabled && DataUsage.isDataUsageAvailable();
     }
 
@@ -127,16 +128,33 @@ public class EgameProxy{
     }
 
     private class ServiceListener implements HostService.IServiceListener {
+        private boolean isIpPoolInited = false;
+        private boolean isDataUsageInited = false;
+        private boolean isProxyConfigUpdated = false;
         @Override
         public void onIpPoolChanged(List<InetSocketAddress> httpSocketAddresses,
                                     List<InetSocketAddress> socksSocketAddresses) {
             EgameProxySelector.get().setHttpProxyPool(httpSocketAddresses);
             EgameProxySelector.get().setSocksProxyPool(socksSocketAddresses);
+            isIpPoolInited = true;
+            updateProxyConfig();
         }
 
         @Override
         public void onDataUsageAvailable(boolean isAvailable) {
             DataUsage.setDataUsageAvailable(isAvailable);
+            isDataUsageInited = true;
+            updateProxyConfig();
+        }
+
+        private void updateProxyConfig() {
+            if (isIpPoolInited && isDataUsageInited) {
+                if (!isProxyConfigUpdated) {
+                    isProxyConfigUpdated = true;
+                    EgameProxy.get().initProxy();
+                }
+            }
+
         }
     }
 

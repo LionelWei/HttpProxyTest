@@ -13,8 +13,7 @@ import java.util.Iterator;
 import java.util.List;
 
 public class NetworkEventBus {
-    // 参见[Java 单例真的写对了么](http://www.race604.com/java-double-checked-singleton/)
-    private static volatile NetworkEventBus sInstance;
+    private static NetworkEventBus sInstance = new NetworkEventBus();
     private List<INetworkStateListener> listeners;
 
     public NetworkEventBus() {
@@ -22,17 +21,7 @@ public class NetworkEventBus {
     }
 
     public static NetworkEventBus getDefault() {
-        NetworkEventBus bus = sInstance;
-        if (sInstance == null) {
-            synchronized (NetworkEventBus.class) {
-                bus = sInstance;
-                if (sInstance == null) {
-                    bus = new NetworkEventBus();
-                    sInstance = bus;
-                }
-            }
-        }
-        return bus;
+        return sInstance;
     }
 
     public void register(INetworkStateListener listener) {
