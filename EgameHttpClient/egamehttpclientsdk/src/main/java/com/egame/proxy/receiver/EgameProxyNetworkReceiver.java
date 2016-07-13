@@ -33,6 +33,7 @@ public class EgameProxyNetworkReceiver extends BroadcastReceiver {
                 break;
             case NetworkUtil.NETWORK_4G:
             case NetworkUtil.NETWORK_3G2G:
+            case NetworkUtil.NETWORK_WIFI_DISCONNECTED:
                 EgameProxy.get().setProxyEnabled(true);
                 break;
         }

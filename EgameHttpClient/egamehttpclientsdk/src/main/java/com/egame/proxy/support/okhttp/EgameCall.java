@@ -70,7 +70,7 @@ public class EgameCall implements INetworkStateListener{
             @Override
             public void run() {
                 while(HostService.isPoolLocked || HostService.isDataLocked) {
-                    Log.d(ProxyUtil.TAG, "waiting...");
+//                    Log.d(ProxyUtil.TAG, "waiting...");
                     // wait
                 }
                 OkHttpClient newClient = mClient.clientWithProxy(mClient.delegate());

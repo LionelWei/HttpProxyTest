@@ -18,6 +18,7 @@ public class NetworkUtil {
     public static final int NETWORK_WIFI = 0x1;
     public static final int NETWORK_4G = 0x2;
     public static final int NETWORK_3G2G = 0x3;
+    public static final int NETWORK_WIFI_DISCONNECTED = 0x4;
     public static int checkState(Context context) {
         int state = -1;
         ConnectivityManager cm = (ConnectivityManager) context
@@ -44,6 +45,7 @@ public class NetworkUtil {
             state = NETWORK_3G2G;
         } else {
             Log.d("EGAME_PROXY", "网络状态: null");
+            state = NETWORK_WIFI_DISCONNECTED;
         }
         return state;
     }

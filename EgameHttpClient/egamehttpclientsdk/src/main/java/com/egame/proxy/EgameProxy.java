@@ -92,7 +92,11 @@ public class EgameProxy{
         this.mChannelCode = channelCode;
     }
 
+    private boolean isEnabled = true;
     public boolean isProxyAvailable() {
+        // test only
+//        isEnabled = !isEnabled;
+//        return isEnabled;
         return mIsProxyEnabled && DataUsage.isDataUsageAvailable();
     }
 
@@ -115,6 +119,7 @@ public class EgameProxy{
                 break;
             case NetworkUtil.NETWORK_4G:
             case NetworkUtil.NETWORK_3G2G:
+            case NetworkUtil.NETWORK_WIFI_DISCONNECTED:
                 // !!! 仅供测试 实际状态与此相反 TODO
                 setProxyEnabled(false);
                 break;
