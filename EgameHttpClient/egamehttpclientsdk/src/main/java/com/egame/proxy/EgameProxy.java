@@ -53,16 +53,15 @@ public class EgameProxy {
         handleNetwork();
     }
 
-    /*package*/ void initProxy() {
-        GlideProxy.init(mContext);
-        IonProxy.initIonProxy(mContext);
+    public Context getContext() {
+        return mContext;
     }
 
-    public EgameOkHttpClient setOkHttpProxy(OkHttpClient oldClient) {
+    public EgameOkHttpClient getEgameOkHttpClient(OkHttpClient oldClient) {
         return new EgameOkHttpClient(oldClient);
     }
 
-    public RequestQueue setVolleyProxy() {
+    public RequestQueue getEgameRequestQueue() {
         return EgameRequestQueue.requestQueueWithProxy(mContext);
     }
 
@@ -71,6 +70,10 @@ public class EgameProxy {
             mIsProxyEnabled = enabled;
             initProxy();
         }
+    }
+
+    public boolean isProxyEnabled() {
+        return mIsProxyEnabled;
     }
 
     public String getAppId() {
@@ -101,12 +104,9 @@ public class EgameProxy {
         return mIsProxyEnabled && DataUsage.isDataUsageAvailable();
     }
 
-    public boolean isProxyEnabled() {
-        return mIsProxyEnabled;
-    }
-
-    public Context getContext() {
-        return mContext;
+    /*package*/ void initProxy() {
+        GlideProxy.init(mContext);
+        IonProxy.init(mContext);
     }
 
     private void handleNetwork() {

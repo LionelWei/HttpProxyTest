@@ -19,7 +19,7 @@ import com.koushikdutta.ion.Ion;
 import java.net.InetSocketAddress;
 
 public class IonProxy {
-    public static void initIonProxy(Context context) {
+    public static void init(Context context) {
         try {
             Class.forName("com.koushikdutta.ion.Ion");
             doInit(context);
@@ -29,14 +29,20 @@ public class IonProxy {
     }
 
     private static void doInit(Context context) {
+        boolean enableProxy = false;
         if (EgameProxy.get().isProxyAvailable()) {
             InetSocketAddress socketAddress = EgameProxySelector.get().getOptimalHttpProxy();
-            String ipAddress = socketAddress.getHostName();
-            int port = socketAddress.getPort();
-            Ion.getDefault(context)
-                    .configure()
-                    .proxy(ipAddress, port);
-        } else {
+            if (socketAddress != null) {
+                enableProxy = true;
+                String ipAddress = socketAddress.getHostName();
+                int port = socketAddress.getPort();
+                Ion.getDefault(context)
+                        .configure()
+                        .proxy(ipAddress, port);
+
+            }
+        }
+        if (!enableProxy) {
             Ion.getDefault(context)
                     .configure()
                     .disableProxy();
