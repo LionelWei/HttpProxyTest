@@ -12,13 +12,14 @@ import android.content.Context;
 import android.util.Log;
 
 import com.egame.proxy.EgameProxy;
+import com.egame.proxy.EgameProxyInternal;
 import com.egame.proxy.server.EgameProxySelector;
 import com.egame.proxy.util.ProxyUtil;
 import com.koushikdutta.ion.Ion;
 
 import java.net.InetSocketAddress;
 
-public class IonProxy {
+public class EgameIon {
     public static void init(Context context) {
         try {
             Class.forName("com.koushikdutta.ion.Ion");
@@ -30,7 +31,7 @@ public class IonProxy {
 
     private static void doInit(Context context) {
         boolean enableProxy = false;
-        if (EgameProxy.get().isProxyAvailable()) {
+        if (EgameProxyInternal.get().isProxyAvailable()) {
             InetSocketAddress socketAddress = EgameProxySelector.get().getOptimalHttpProxy();
             if (socketAddress != null) {
                 enableProxy = true;

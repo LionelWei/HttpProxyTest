@@ -11,6 +11,7 @@ package com.egame.proxy.support.okhttp;
 import android.util.Log;
 
 import com.egame.proxy.EgameProxy;
+import com.egame.proxy.EgameProxyInternal;
 import com.egame.proxy.server.EgameProxySelector;
 import com.egame.proxy.server.SignatureGenerator;
 import com.egame.proxy.util.ProxyUtil;
@@ -170,7 +171,7 @@ public class EgameOkHttpClient {
 
     /*package*/ OkHttpClient clientWithProxy(OkHttpClient oldClient) {
         OkHttpClient.Builder builder = oldClient.newBuilder();
-        if (EgameProxy.get().isProxyAvailable()) {
+        if (EgameProxyInternal.get().isProxyAvailable()) {
             // 对于socks代理 new Proxy(SOCKS, ...) 不起作用
             // 得用socketFactory 可能是aosp的bug
             Log.d(ProxyUtil.TAG, "Proxy is available");

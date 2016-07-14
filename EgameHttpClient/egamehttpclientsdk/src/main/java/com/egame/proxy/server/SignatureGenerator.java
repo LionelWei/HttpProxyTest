@@ -38,6 +38,7 @@ channel_code= 9999 9999
 */
 
 import com.egame.proxy.EgameProxy;
+import com.egame.proxy.EgameProxyInternal;
 import com.egame.proxy.util.KeyUtil;
 
 import java.security.MessageDigest;
@@ -55,17 +56,17 @@ public class SignatureGenerator {
     }
     private void generateSignature() {
         String version = "1.0.0";
-        String appId = EgameProxy.get().getAppId();
+        String appId = EgameProxyInternal.get().getAppId();
         if (appId == null) {
             appId = "1234567890"; // test
         }
 
-        String userId = EgameProxy.get().getUserId();
+        String userId = EgameProxyInternal.get().getUserId();
         if (userId == null) {
             userId = "0987654321"; // test
         }
 
-        String channelCode = EgameProxy.get().getChannelCode();
+        String channelCode = EgameProxyInternal.get().getChannelCode();
         if (channelCode == null) {
             channelCode = ""; // test
         }

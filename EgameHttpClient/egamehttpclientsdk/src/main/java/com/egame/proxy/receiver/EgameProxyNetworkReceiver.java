@@ -5,7 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.egame.proxy.EgameProxy;
-import com.egame.proxy.listener.NetworkEventBus;
+import com.egame.proxy.EgameProxyInternal;
+import com.egame.proxy.event.NetworkEventBus;
 import com.egame.proxy.util.NetworkUtil;
 
 public class EgameProxyNetworkReceiver extends BroadcastReceiver {
@@ -29,12 +30,12 @@ public class EgameProxyNetworkReceiver extends BroadcastReceiver {
         // WIFI时 切断代理直接访问原始服务器
         switch (state) {
             case NetworkUtil.NETWORK_WIFI:
-                EgameProxy.get().setProxyEnabled(false);
+                EgameProxyInternal.get().setProxyEnabled(false);
                 break;
             case NetworkUtil.NETWORK_4G:
             case NetworkUtil.NETWORK_3G2G:
             case NetworkUtil.NETWORK_WIFI_DISCONNECTED:
-                EgameProxy.get().setProxyEnabled(true);
+                EgameProxyInternal.get().setProxyEnabled(true);
                 break;
         }
         NetworkEventBus.getDefault().post(state);

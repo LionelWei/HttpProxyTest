@@ -9,9 +9,10 @@ package com.egame.proxy.support.okhttp;
  */
 
 import com.egame.proxy.EgameProxy;
+import com.egame.proxy.EgameProxyInternal;
 import com.egame.proxy.exception.EgameProxyException;
-import com.egame.proxy.listener.INetworkStateListener;
-import com.egame.proxy.listener.NetworkEventBus;
+import com.egame.proxy.event.INetworkStateListener;
+import com.egame.proxy.event.NetworkEventBus;
 import com.egame.proxy.server.HostService;
 import com.egame.proxy.util.NetworkUtil;
 
@@ -60,7 +61,7 @@ public class EgameCall implements INetworkStateListener{
     }
 
     public void enqueue(final Callback responseCallback) throws EgameProxyException {
-        cancelCallWhenMobileWithOutProxy();
+        cancelCallWhenMobileWithoutProxy();
         checkProxy();
         // 由于要等待notify, 所以另起一个线程
         new Thread(new Runnable() {
@@ -89,19 +90,19 @@ public class EgameCall implements INetworkStateListener{
     @Override
     public void onNetworkStateChanged(int state) {
         if (state != NetworkUtil.NETWORK_WIFI) {
-            cancelCallWhenMobileWithOutProxy();
+            cancelCallWhenMobileWithoutProxy();
         }
     }
 
     private void checkProxy() throws EgameProxyException {
         int netState = NetworkUtil.checkState(EgameProxy.get().getContext());
         if (netState != NetworkUtil.NETWORK_WIFI
-                && !EgameProxy.get().isProxyAvailable()) {
+                && !EgameProxyInternal.get().isProxyAvailable()) {
             throw new EgameProxyException();
         }
     }
 
-    private void cancelCallWhenMobileWithOutProxy() {
+    private void cancelCallWhenMobileWithoutProxy() {
         NetworkEventBus.getDefault().register(this);
         int netState = NetworkUtil.checkState(EgameProxy.get().getContext());
         Iterator<EgameCall> i = sAsyncCallQueue.iterator();
@@ -114,7 +115,7 @@ public class EgameCall implements INetworkStateListener{
 
             if (call.isExecuted() || call.isCanceled()
                     || (netState != NetworkUtil.NETWORK_WIFI
-                        && !EgameProxy.get().isProxyAvailable())) {
+                        && !EgameProxyInternal.get().isProxyAvailable())) {
                 i.remove();
                 // 由于普通类没有生命周期, 只能在这里手动注销
                 NetworkEventBus.getDefault().unRegister(this);
@@ -122,7 +123,7 @@ public class EgameCall implements INetworkStateListener{
             }
 
             if (netState != NetworkUtil.NETWORK_WIFI
-                && !EgameProxy.get().isProxyAvailable()) {
+                && !EgameProxyInternal.get().isProxyAvailable()) {
                 // 当处于非WiFi网络且没有启动代理时, 取消当前请求
                 call.cancel();
                 i.remove();

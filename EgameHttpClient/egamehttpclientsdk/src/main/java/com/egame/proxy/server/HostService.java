@@ -11,6 +11,7 @@ package com.egame.proxy.server;
 import android.util.Log;
 
 import com.egame.proxy.EgameProxy;
+import com.egame.proxy.EgameProxyInternal;
 import com.egame.proxy.model.DataUsageModel;
 import com.egame.proxy.model.IpPoolModel;
 import com.egame.proxy.util.ProxyUtil;
@@ -96,9 +97,9 @@ public class HostService {
 
     private void checkDataUsage() {
         isDataLocked = true;
-        String appId = EgameProxy.get().getAppId();
-        String userId = EgameProxy.get().getUserId();
-        String channelCode = EgameProxy.get().getChannelCode();
+        String appId = EgameProxyInternal.get().getAppId();
+        String userId = EgameProxyInternal.get().getUserId();
+        String channelCode = EgameProxyInternal.get().getChannelCode();
         Call call = mRestApi.getDataUsage(appId, userId, channelCode);
         call.enqueue(new Callback() {
             @Override
