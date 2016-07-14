@@ -52,11 +52,6 @@ public class EgameProxyInternal {
         return mIsProxyEnabled && DataUsage.isDataUsageAvailable();
     }
 
-    /*package*/ void initProxy() {
-        EgameGlide.init(mContext);
-        EgameIon.init(mContext);
-    }
-
     public String getAppId() {
         return mAppId;
     }
@@ -79,6 +74,17 @@ public class EgameProxyInternal {
 
     public void setChannelCode(String channelCode) {
         this.mChannelCode = channelCode;
+    }
+
+    public void waitForIpAndData() {
+        if (isProxyEnabled()) {
+            mService.waitForIpAndData();
+        }
+    }
+
+    public void initProxy() {
+        EgameGlide.init(mContext);
+        EgameIon.init(mContext);
     }
 
     private EgameProxyInternal() {

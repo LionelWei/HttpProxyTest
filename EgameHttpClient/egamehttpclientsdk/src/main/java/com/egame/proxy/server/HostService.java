@@ -10,7 +10,6 @@ package com.egame.proxy.server;
 
 import android.util.Log;
 
-import com.egame.proxy.EgameProxy;
 import com.egame.proxy.EgameProxyInternal;
 import com.egame.proxy.model.DataUsageModel;
 import com.egame.proxy.model.IpPoolModel;
@@ -18,6 +17,7 @@ import com.egame.proxy.util.ProxyUtil;
 import com.google.gson.Gson;
 
 import java.io.IOException;
+import java.io.InterruptedIOException;
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,8 +27,9 @@ import okhttp3.Callback;
 import okhttp3.Response;
 
 public class HostService {
-    public static volatile boolean isPoolLocked = false;
-    public static volatile boolean isDataLocked = false;
+    public boolean isIpAcquired = false;
+    public boolean isDataAcquired = false;
+    public boolean notified = false;
     private IServiceListener mListener;
     private RestApi mRestApi;
 
@@ -40,6 +41,7 @@ public class HostService {
     public interface IServiceListener {
         void onIpPoolChanged(List<InetSocketAddress> httpSocketAddresses,
                              List<InetSocketAddress> socksSocketAddresses);
+
         void onDataUsageAvailable(boolean isAvailable);
     }
 
@@ -48,9 +50,18 @@ public class HostService {
         checkDataUsage();
     }
 
+    public synchronized void waitForIpAndData() {
+        while (!isIpAcquired || !isDataAcquired) {
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     private void checkIpPool() {
         Call call = mRestApi.getIpPool();
-        isPoolLocked = true;
         call.enqueue(new Callback() {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
@@ -84,7 +95,7 @@ public class HostService {
                 }
 
                 mListener.onIpPoolChanged(httpProxyList, socksProxyList);
-                isPoolLocked = false;
+                acquiredIpPool();
             }
 
             @Override
@@ -95,8 +106,22 @@ public class HostService {
 
     }
 
+    private synchronized void acquiredIpPool() {
+        isIpAcquired = true;
+        if (isDataAcquired && !notified) {
+            notifyAll();
+        }
+    }
+
+    private synchronized void acquiredData() {
+        isDataAcquired = true;
+        if (isIpAcquired && !notified) {
+            notified = true;
+            notifyAll();
+        }
+    }
+
     private void checkDataUsage() {
-        isDataLocked = true;
         String appId = EgameProxyInternal.get().getAppId();
         String userId = EgameProxyInternal.get().getUserId();
         String channelCode = EgameProxyInternal.get().getChannelCode();
@@ -110,7 +135,7 @@ public class HostService {
                 Log.d(ProxyUtil.TAG, model.toString());
                 boolean isAvailable = model.ext.flag;
                 mListener.onDataUsageAvailable(isAvailable);
-                isDataLocked = false;
+                acquiredData();
             }
 
             @Override

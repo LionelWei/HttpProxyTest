@@ -8,7 +8,9 @@ package com.egame.proxy.exception;
  * History:		2016/7/8 1.00 初始版本
  */
 
-public class EgameProxyException extends Exception {
+import java.io.IOException;
+
+public class EgameProxyException extends IOException {
     public EgameProxyException() {
     }
 
