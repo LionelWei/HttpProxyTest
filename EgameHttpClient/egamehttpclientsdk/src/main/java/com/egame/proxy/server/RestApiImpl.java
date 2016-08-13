@@ -23,13 +23,12 @@ public class RestApiImpl implements RestApi{
                 .build();
         return sInstance.newCall(request);
     }
-    public Call getDataUsage(String appId, String userId, String channelCode) {
+    public Call getDataUsage(String appId, String userId) {
         Request request = new Request
                 .Builder()
                 .url(RestApi.DATA_USAGE_URL)
                 .addHeader("app_id", (appId == null) ? "" : appId)
                 .addHeader("user_id", (userId == null) ? "": userId)
-                .addHeader("channel_code", (channelCode == null) ? "" : channelCode)
                 .build();
         return sInstance.newCall(request);
     }

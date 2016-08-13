@@ -50,6 +50,7 @@ public class HostService {
         checkDataUsage();
     }
 
+    // 同步获取ip池和数据流量
     public synchronized void waitForIpAndData() {
         while (!isIpAcquired || !isDataAcquired) {
             try {
@@ -124,8 +125,7 @@ public class HostService {
     private void checkDataUsage() {
         String appId = EgameProxyInternal.get().getAppId();
         String userId = EgameProxyInternal.get().getUserId();
-        String channelCode = EgameProxyInternal.get().getChannelCode();
-        Call call = mRestApi.getDataUsage(appId, userId, channelCode);
+        Call call = mRestApi.getDataUsage(appId, userId);
         call.enqueue(new Callback() {
             @Override
             public void onResponse(Call call, Response response) throws IOException {

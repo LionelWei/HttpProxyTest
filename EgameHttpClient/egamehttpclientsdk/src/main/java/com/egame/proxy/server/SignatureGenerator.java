@@ -9,17 +9,17 @@ package com.egame.proxy.server;
  */
 
 /*
+v3
+
 步骤1.参数拼接：
 app_id（10位）
 user_id（10位）
-channel_code（8位）
 
 例如
 appid = 99 9999 9999
 user_id = 99 9999 9999
-channel_code= 9999 9999
 拼接后参数为：
-99 9999 9999 99 9999 9999 9999 9999
+99 9999 9999 99 9999 9999
 
 步骤2生成随机数
 	随机生成8位16进制随机数(例如28aec797)
@@ -34,7 +34,7 @@ channel_code= 9999 9999
 版本号,随机数,appId,userId,channelCode,md5的值
 
 结果：
-110, 28aec797, 99 9999 9999, 99 9999 9999, 9999 9999, xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
+110, 28aec797, 99 9999 9999, 99 9999 9999, xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
 */
 
 import com.egame.proxy.EgameProxy;
@@ -66,13 +66,8 @@ public class SignatureGenerator {
             userId = "0987654321"; // test
         }
 
-        String channelCode = EgameProxyInternal.get().getChannelCode();
-        if (channelCode == null) {
-            channelCode = ""; // test
-        }
-
         String nonce = KeyUtil.getNonce();
-        String concat = appId + userId + channelCode + version;
+        String concat = appId + userId + version;
         String md5 = "";
         try {
             byte[] bytes = concat.getBytes();
@@ -85,7 +80,6 @@ public class SignatureGenerator {
                 + nonce + ","
                 + appId + ","
                 + userId + ","
-                + channelCode + ","
                 + md5;
     }
 }

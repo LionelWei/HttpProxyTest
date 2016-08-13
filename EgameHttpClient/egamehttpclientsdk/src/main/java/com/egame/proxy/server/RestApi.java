@@ -20,5 +20,5 @@ public interface RestApi {
     String IP_POOL_URL = PROXY_HOST + "host/get.json";
 
     Call getIpPool();
-    Call getDataUsage(String appId, String userId, String channelCode);
+    Call getDataUsage(String appId, String userId);
 }

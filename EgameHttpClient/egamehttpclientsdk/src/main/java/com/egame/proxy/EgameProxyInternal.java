@@ -27,7 +27,6 @@ public class EgameProxyInternal {
     private HostService mService;
     private String mAppId;
     private String mUserId;
-    private String mChannelCode;
 
     private static class LazyHolder {
         private static final EgameProxyInternal sInstance = new EgameProxyInternal();
@@ -66,14 +65,6 @@ public class EgameProxyInternal {
 
     public void setUserId(String userId) {
         this.mUserId = userId;
-    }
-
-    public String getChannelCode() {
-        return mChannelCode;
-    }
-
-    public void setChannelCode(String channelCode) {
-        this.mChannelCode = channelCode;
     }
 
     public void waitForIpAndData() {

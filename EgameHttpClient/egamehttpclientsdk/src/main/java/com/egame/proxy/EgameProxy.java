@@ -66,13 +66,6 @@ public class EgameProxy {
         mInternal.setUserId(userId);
     }
 
-    /**
-     * 设置渠道号
-     */
-    public void setChannelCode(String channelCode) {
-        mInternal.setChannelCode(channelCode);
-    }
-
     public Context getContext() {
         return mContext;
     }
